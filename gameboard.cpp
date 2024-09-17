@@ -16,11 +16,29 @@ Gameboard::Gameboard() {
 
 
 void Gameboard::render(int row, int column) const{
-	std::cout << " ";
-	for (size_t col = 0; col <= column; col++) {
-		std::cout << " - - - " << " ";
+	std::cout << "  ";
+	for (size_t c = 1; c <= column; c++) {
+		std::cout << " - " << c ;
 	}
 	std::cout << std::endl;
+
+	for (size_t r = 1; r <= row; r++) {
+		std::cout << " ";
+		std::cout << static_cast<char>('a' + r - 1);
+		for (size_t c = 1; c <= column+1; c++) {
+			std::cout << " | " << " ";
+		}
+		std::cout << std::endl;
+		for (size_t c = 1; c <= column+1; c++) {
+			if (c != 1) {
+				std::cout << " - " << " ";
+			}
+			else {
+				std::cout << "  " << "  ";
+			}
+		}
+		std::cout << std::endl;
+	}
 }
 
 void Gameboard::chooseBox() {
