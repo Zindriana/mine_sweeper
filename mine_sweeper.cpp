@@ -8,10 +8,12 @@ int main()
     std::cout << "How big do you want the game board to be?" << std::endl;
     std::cin >> board_size;
     Gameboard gameboard = Gameboard(board_size, board_size);
-    gameboard.render();
-    gameboard.chooseBox();
-    gameboard.render();
 
+    for (size_t i = 0; i < 3; ++i) {
+        gameboard.render();
+        gameboard.chooseBox();
+    }
+    gameboard.render();
 
     return 0;
 }

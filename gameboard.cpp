@@ -5,8 +5,8 @@
 #include <tuple>
 
 Gameboard::Gameboard(int row, int column) : row(row), column(column) {
-	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
-		for (size_t c = 1; c < column; ++c) { //postincrement behöver skapa en kopia först
+	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
+		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
 			board.push_back(std::make_tuple(r, c, starting_char));
 		}
 	}
