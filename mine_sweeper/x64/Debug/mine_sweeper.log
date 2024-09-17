@@ -1,2 +1,57 @@
-﻿  mine_sweeper.cpp
+﻿  gameboard.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244: 'initializing': conversion from '_Ty' to '_Ty', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         with
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:             _Ty=unsigned __int64
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         and
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:             _Ty=int
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47): warning C4244:         ]
+  (compiling source file 'gameboard.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(142,47):
+      the template instantiation context (the oldest one first) is
+          C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\gameboard.cpp(10,35):
+          see reference to function template instantiation 'std::tuple<char,int,char>::tuple<char,unsigned __int64,char,0>(std::tuple<char,unsigned __int64,char> &&) noexcept' being compiled
+              C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\gameboard.cpp(10,19):
+              see the first reference to 'std::tuple<char,int,char>::tuple' in 'Gameboard::Gameboard'
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(385,16):
+          see reference to function template instantiation 'std::tuple<char,int,char>::tuple<std::_Unpack_tuple_t,std::tuple<char,unsigned __int64,char>,0>(_Tag,_Tpl &&)' being compiled
+          with
+          [
+              _Tag=std::_Unpack_tuple_t,
+              _Tpl=std::tuple<char,unsigned __int64,char>
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(319,16):
+          see reference to function template instantiation 'std::tuple<char,int,char>::tuple<std::_Unpack_tuple_t,_Ty,0,1,2,0>(_Tag,_Tpl &&,std::integer_sequence<size_t,0,1,2>)' being compiled
+          with
+          [
+              _Ty=std::tuple<char,unsigned __int64,char>,
+              _Tag=std::_Unpack_tuple_t,
+              _Tpl=std::tuple<char,unsigned __int64,char>
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(1001,12):
+          see reference to function template instantiation 'std::tuple<char,int,char>::tuple<std::_Exact_args_t,char,unsigned __int64,char,0>(_Tag,_This2 &&,unsigned __int64 &&,char &&)' being compiled
+          with
+          [
+              _Tag=std::_Exact_args_t,
+              _This2=char
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(312,18):
+          see reference to function template instantiation 'std::tuple<int,char>::tuple<std::_Exact_args_t,_Ty,char,0>(_Tag,_This2 &&,char &&)' being compiled
+          with
+          [
+              _Ty=unsigned __int64,
+              _Tag=std::_Exact_args_t,
+              _This2=unsigned __int64
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\tuple(312,102):
+          see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=int,
+              _Ty=unsigned __int64,
+              _Other=unsigned __int64
+          ]
+  
   mine_sweeper.vcxproj -> C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\x64\Debug\mine_sweeper.exe

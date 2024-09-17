@@ -1,35 +1,40 @@
 #include "gameboard.h"
 #include <string>
 #include <iostream>
+#include <vector>
+#include <tuple>
 
-Gameboard::Gameboard() {
-	a1 = ' ';
-	a2 = ' ';
-	a3 = ' ';
-	b1 = ' ';
-	b2 = ' ';
-	b3 = ' ';
-	c1 = ' ';
-	c2 = ' ';
-	c3 = ' ';
+Gameboard::Gameboard(int row, int column) : row(row), column(column) {
+	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
+		for (size_t c = 1; c < column; ++c) { //postincrement behöver skapa en kopia först
+			board.push_back(std::make_tuple(r, c, starting_char));
+		}
+	}
 }
 
-
-void Gameboard::render(int row, int column) const{
+void Gameboard::render() const{
+	int r = row;
+	int c = column;
 	std::cout << "  ";
-	for (size_t c = 1; c <= column; c++) {
+	for (size_t c = 1; c <= column; ++c) {
 		std::cout << " - " << c ;
 	}
 	std::cout << std::endl;
 
-	for (size_t r = 1; r <= row; r++) {
-		std::cout << " ";
-		std::cout << static_cast<char>('a' + r - 1);
-		for (size_t c = 1; c <= column+1; c++) {
-			std::cout << " | " << " ";
+	for (size_t r = 0; r < row; r++) {
+		std::cout << " " << static_cast<char>('a' + r );
+		for (size_t c = 1; c <= column + 1; ++c) {
+			char board_char = ' ';
+			for (const auto& coordinate : board) {
+				if (std::get<0>(coordinate) == static_cast<char>('a' + r) && std::get<1>(coordinate) == c) {
+					board_char = std::get<2>(coordinate);
+					break;
+				}
+			}
+			std::cout << " | " << board_char;
 		}
 		std::cout << std::endl;
-		for (size_t c = 1; c <= column+1; c++) {
+		for (size_t c = 1; c <= column+1; ++c) {
 			if (c != 1) {
 				std::cout << " - " << " ";
 			}
@@ -49,7 +54,15 @@ void Gameboard::chooseBox() {
 }
 
 void Gameboard::markBox(std::string s) {
-	
+	char char_coor = s[0];
+	int int_coor = std::stoi(s.substr(1));
+
+	for (auto& coordinate : board) {
+		if (std::get<0>(coordinate) == char_coor && std::get<1>(coordinate) == int_coor) {
+			std::get<2>(coordinate) = 'X';
+			break;
+		}
+	}
 }
 
 int Gameboard::checkBoxes(std::string s) {
