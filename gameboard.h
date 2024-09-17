@@ -16,4 +16,5 @@ public:
     void chooseBox();
     void markBox(std::string s);
     int checkBoxes(std::string s);
+    bool isValidCoor(std::string s);
 };

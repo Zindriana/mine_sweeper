@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <cctype>
 
 Gameboard::Gameboard(int row, int column) : row(row), column(column) {
 	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
@@ -50,7 +51,12 @@ void Gameboard::chooseBox() {
 	std::string chosenBox = "";
 	std::cout << "which box do you want to mark?" << std::endl;
 	std::cin >> chosenBox;
-	markBox(chosenBox);
+	if (isValidCoor(chosenBox)) {
+		markBox(chosenBox);
+	} else {
+		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
+		chooseBox();
+	};
 }
 
 void Gameboard::markBox(std::string s) {
@@ -71,4 +77,13 @@ int Gameboard::checkBoxes(std::string s) {
 	logic to check if adjacent boxes has mines or not
 	};*/
 	return amountOfMines;
+}
+
+bool Gameboard::isValidCoor(std::string s) {
+		return
+		s.size() == 2
+		&& isalpha(s[0])
+		&& isdigit(s[1])
+		&& s[0] <= static_cast<char>('a' + row)
+		&& (s[1] - '0') <= column;
 }
