@@ -5,20 +5,18 @@
 #include <tuple>
 #include <cctype>
 #include "mine.h"
+#include <ctime>
+#include <cstdlib>
 
 Gameboard::Gameboard(int row, int column) : row(row), column(column) {
 	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
 		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
 		}
-		Mine minefield = Mine();
-		minefield.randomizeMines();
 	}
 }
 
 void Gameboard::render() const{
-	int r = row;
-	int c = column;
 	std::cout << "  ";
 	for (size_t c = 1; c <= column; ++c) {
 		std::cout << " - " << c ;
@@ -29,9 +27,9 @@ void Gameboard::render() const{
 		std::cout << " " << static_cast<char>('a' + r );
 		for (size_t c = 1; c <= column + 1; ++c) {
 			char board_char = ' ';
-			for (const auto& coordinate : board) {
-				if (std::get<0>(coordinate) == static_cast<char>('a' + r) && std::get<1>(coordinate) == c) {
-					board_char = std::get<2>(coordinate);
+			for (const auto& coor : board) {
+				if (std::get<0>(coor) == static_cast<char>('a' + r) && std::get<1>(coor) == c) {
+					board_char = std::get<2>(coor);
 					break;
 				}
 			}
@@ -63,11 +61,19 @@ void Gameboard::chooseBox() {
 }
 
 void Gameboard::markBox(std::string& s) {
-	std::pair<char, int> coor = parseCoordinates(s);
+	std::pair<char, int> coordinate = parseCoordinates(s);
 
-	for (auto& coordinate : board) {
-		if (std::get<0>(coordinate) == coor.first && std::get<1>(coordinate) == coor.second) {
-			std::get<2>(coordinate) = 'X';
+	for (auto& coor : board) {
+		if (std::get<0>(coor) == coordinate.first
+			&& std::get<1>(coor) == coordinate.second
+			&& std::get<3>(coor) == true) {
+			std::get<2>(coor) = 'M';
+			break;
+		}
+		else if (std::get<0>(coor) == coordinate.first
+			&& std::get<1>(coor) == coordinate.second
+			&& std::get<3>(coor) == false){
+			std::get<2>(coor) = 'X';
 			break;
 		}
 	}
@@ -99,7 +105,14 @@ std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{
 void Gameboard::randomizeMines() {
 	char char_coor;
 	int char_int;
-	for (size_t i = row; i <= 0; i++) {
-
+	for (size_t i = 0; i <= row; ++i) {
+		char_coor = 'a' + std::rand() % row;
+		char_int = 1 + std::rand() % column;
+		for (auto& coor : board) {
+			if (std::get<0>(coor) == char_coor && std::get<1>(coor) == char_int) {
+				std::get<3>(coor) = true;
+				break;
+			}
+		}
 	}
-};
+}
