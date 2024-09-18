@@ -23,11 +23,22 @@ int main()
     Gameboard gameboard = Gameboard(board_size, board_size);
     gameboard.randomizeMines();
 
-    for (size_t i = 0; i < 9; ++i) {
+    bool kaboom = false;
+    int turns = board_size * board_size - board_size; //antalet turns som behöver spelas innan spelet är vunnet
+    int t = 0; //antal spelade rundor
+    while (!kaboom && t < turns ) {
         gameboard.render();
-        gameboard.chooseBox();
+        kaboom = gameboard.chooseBox();
+        ++t;
     }
+    
     gameboard.render();
+    if (kaboom) {
+        std::cout << "KABOOM! Game over" << std::endl;
+    } else {
+        std::cout << "Grattis, du överlevde. För den här gången :D" << std::endl;
+    }
+    
 
     return 0;
 }

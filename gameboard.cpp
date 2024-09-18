@@ -48,19 +48,21 @@ void Gameboard::render() const{
 	}
 }
 
-void Gameboard::chooseBox() {
+bool Gameboard::chooseBox() {
+	bool kaboom = false;
 	std::string chosenBox = "";
 	std::cout << "which box do you want to mark?" << std::endl;
 	std::cin >> chosenBox;
 	if (isValidCoor(chosenBox)) {
-		markBox(chosenBox);
+		kaboom = markBox(chosenBox);
 	} else {
 		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
 		chooseBox();
 	};
+	return kaboom;
 }
 
-void Gameboard::markBox(std::string& s) {
+bool Gameboard::markBox(std::string& s) {
 	std::pair<char, int> coordinate = parseCoordinates(s);
 
 	for (auto& coor : board) {
@@ -68,14 +70,14 @@ void Gameboard::markBox(std::string& s) {
 			&& std::get<1>(coor) == coordinate.second
 			&& std::get<3>(coor) == true) {
 			std::get<2>(coor) = 'M';
-			break;
+			return true;
 		}
 		else if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second
 			&& std::get<3>(coor) == false){
 			int amountOfMines = checkBoxes(s);
 			std::get<2>(coor) = '0' + amountOfMines;
-			break;
+			return false;
 		}
 	}
 }
