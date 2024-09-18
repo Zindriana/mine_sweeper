@@ -8,7 +8,7 @@ int main()
 {
     std::srand(std::time(0));
     int board_size;
-    std::cout << "Welcome to Awseome Minesweeper!\n";
+    std::cout << "Welcome to Awesome Minesweeper!\n";
     
     do {
         if (std::cin.fail()) {
