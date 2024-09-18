@@ -14,8 +14,9 @@ private:
 public:
     Gameboard(int row, int column);
     void render() const;
-    bool chooseBox();
-    bool markBox(std::string& s);
+    bool chooseBox(char c);
+    bool exploreBox(std::string& s);
+    void flagBox(std::string& s);
     int checkBoxes(std::string& s);
     bool isValidCoor(std::string& s) const;
     std::pair<char, int> parseCoordinates(std::string& s) const;

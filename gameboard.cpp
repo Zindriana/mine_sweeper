@@ -48,21 +48,23 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::chooseBox() {
+bool Gameboard::chooseBox(char c) {
 	bool kaboom = false;
 	std::string chosenBox = "";
 	std::cout << "which box do you want to mark?" << std::endl;
 	std::cin >> chosenBox;
-	if (isValidCoor(chosenBox)) {
-		kaboom = markBox(chosenBox);
+	if (isValidCoor(chosenBox) && c == 'e') {
+		kaboom = exploreBox(chosenBox);
+	} else if (isValidCoor(chosenBox) && c == 'f') {
+		flagBox(chosenBox);
 	} else {
 		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
-		chooseBox();
+		chooseBox(c);
 	};
 	return kaboom;
 }
 
-bool Gameboard::markBox(std::string& s) {
+bool Gameboard::exploreBox(std::string& s) {
 	std::pair<char, int> coordinate = parseCoordinates(s);
 
 	for (auto& coor : board) {
@@ -82,6 +84,21 @@ bool Gameboard::markBox(std::string& s) {
 	}
 }
 
+void Gameboard::flagBox(std::string& s) {
+	std::pair<char, int> coordinate = parseCoordinates(s);
+	for (auto& coor : board) {
+		if (std::get<0>(coor) == coordinate.first
+			&& std::get<1>(coor) == coordinate.second) {
+			if (std::get<2>(coor) == ' ') {
+				std::get<2>(coor) = 'F';
+			}
+			else {
+				std::cout << "The target area is already explored, choose a new area. " << std::endl;
+			}			
+		}
+	}
+}
+
 int Gameboard::checkBoxes(std::string& s) {
 	int amountOfMines = 0;
 	std::pair<char, int> coordinate = parseCoordinates(s);
@@ -89,7 +106,7 @@ int Gameboard::checkBoxes(std::string& s) {
 		for (int j = -1; j < 2; ++j) {
 			char char_coor = coordinate.first + i;
 			int int_coor = coordinate.second + j;
-			if (char_coor > 'a' && char_coor <= 'a' + row -1 && int_coor > 0 && int_coor <= column && !(i == 0 && j == 0)) {
+			if (char_coor >= 'a' && char_coor <= 'a' + row -1 && int_coor > 0 && int_coor <= column && !(i == 0 && j == 0)) {
 				for (auto& coor : board) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor

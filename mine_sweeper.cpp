@@ -26,17 +26,29 @@ int main()
     bool kaboom = false;
     int turns = board_size * board_size - board_size; //antalet turns som behöver spelas innan spelet är vunnet
     int t = 0; //antal spelade rundor
+    std::cout << " turns to survive: " << turns << std::endl;
     while (!kaboom && t < turns ) {
         gameboard.render();
-        kaboom = gameboard.chooseBox();
-        ++t;
+        char markChoice;
+        std::cout << "Do you want to explore an area or flag an area as dangerous? (e or f)" << std::endl;
+        std::cin >> markChoice;
+        if (markChoice == 'e' || markChoice == 'f') {
+            kaboom = gameboard.chooseBox(markChoice);
+            if(markChoice == 'e'){
+                ++t;
+                std::cout << " turns played: " << t << std::endl;
+            }  
+        } else {
+            std::cout << "Not a legit choice, choose again" << std::endl;
+        }
+        
     }
     
     gameboard.render();
     if (kaboom) {
         std::cout << "KABOOM! Game over" << std::endl;
     } else {
-        std::cout << "Grattis, du överlevde. För den här gången :D" << std::endl;
+        std::cout << "Congratz, you survived. This time..." << std::endl;
     }
     
 
