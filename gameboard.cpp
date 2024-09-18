@@ -73,7 +73,8 @@ void Gameboard::markBox(std::string& s) {
 		else if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second
 			&& std::get<3>(coor) == false){
-			std::get<2>(coor) = 'X';
+			int amountOfMines = checkBoxes(s);
+			std::get<2>(coor) = '0' + amountOfMines;
 			break;
 		}
 	}
@@ -81,9 +82,22 @@ void Gameboard::markBox(std::string& s) {
 
 int Gameboard::checkBoxes(std::string& s) {
 	int amountOfMines = 0;
-	/*if () {
-	logic to check if adjacent boxes has mines or not
-	};*/
+	std::pair<char, int> coordinate = parseCoordinates(s);
+	for (int i = -1; i < 2; ++i) {
+		for (int j = -1; j < 2; ++j) {
+			char char_coor = coordinate.first + i;
+			int int_coor = coordinate.second + j;
+			if (char_coor > 'a' && char_coor <= 'a' + row -1 && int_coor > 0 && int_coor <= column && !(i == 0 && j == 0)) {
+				for (auto& coor : board) {
+					if (std::get<0>(coor) == char_coor
+						&& std::get<1>(coor) == int_coor
+						&& std::get<3>(coor) == true) {
+						++amountOfMines;
+					}
+				}
+			}
+		}
+	}
 	return amountOfMines;
 }
 
