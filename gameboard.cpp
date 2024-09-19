@@ -4,7 +4,6 @@
 #include <vector>
 #include <tuple>
 #include <cctype>
-#include "mine.h"
 #include <ctime>
 #include <cstdlib>
 
