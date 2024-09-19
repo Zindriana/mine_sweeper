@@ -128,12 +128,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gameboard.cpp" />
-    <ClCompile Include="mine.cpp" />
     <ClCompile Include="mine_sweeper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gameboard.h" />
-    <ClInclude Include="mine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

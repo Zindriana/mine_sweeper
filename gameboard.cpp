@@ -4,7 +4,6 @@
 #include <vector>
 #include <tuple>
 #include <cctype>
-#include "mine.h"
 #include <ctime>
 #include <cstdlib>
 
@@ -28,7 +27,7 @@ void Gameboard::render() const{
 		for (size_t c = 1; c <= column + 1; ++c) {
 			char board_char = ' ';
 			for (const auto& coor : board) {
-				if (std::get<0>(coor) == static_cast<char>('a' + r) && std::get<1>(coor) == c) {
+				if (std::get<0>(coor) == 'a' + r && std::get<1>(coor) == c) {
 					board_char = std::get<2>(coor);
 					break;
 				}
@@ -79,6 +78,9 @@ bool Gameboard::exploreBox(std::string& s) {
 			&& std::get<3>(coor) == false){
 			int amountOfMines = checkBoxes(s);
 			std::get<2>(coor) = '0' + amountOfMines;
+			if (amountOfMines == 0) {
+				//
+			}
 			return false;
 		}
 	}
@@ -106,7 +108,7 @@ int Gameboard::checkBoxes(std::string& s) {
 		for (int j = -1; j < 2; ++j) {
 			char char_coor = coordinate.first + i;
 			int int_coor = coordinate.second + j;
-			if (char_coor >= 'a' && char_coor <= 'a' + row -1 && int_coor > 0 && int_coor <= column && !(i == 0 && j == 0)) {
+			if (isValidCoor(s) && !(i == 0 && j == 0)) {
 				for (auto& coor : board) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor
@@ -121,15 +123,14 @@ int Gameboard::checkBoxes(std::string& s) {
 }
 
 bool Gameboard::isValidCoor(std::string& s) const {
-		return
-		s.size() == 2
-		&& isalpha(s[0])
-		&& isdigit(s[1])
-		&& s[0] <= static_cast<char>('a' + row)
-		&& (s[1] - '0') <= column;
+	std::pair<char, int> coordinate = parseCoordinates(s);
+	return coordinate.first >= 'a' 
+		&& coordinate.first <= 'a' + row - 1 
+		&& coordinate.second > 0 
+		&& coordinate.second <= column;
 }
 
-std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{
+std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{ //use this more often
 	char char_coor = s[0];
 	int int_coor = std::stoi(s.substr(1));
 	return std::make_pair(char_coor, int_coor);
