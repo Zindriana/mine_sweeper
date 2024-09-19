@@ -5,7 +5,7 @@
 
 class Gameboard {
 private:
-    std::vector<std::tuple<char, int, char, bool>> board; //[0] to int
+    std::vector<std::tuple<char, int, char, bool>> board; //[0] to int?
     int row;
     int column;
     char starting_char = ' ';
@@ -14,6 +14,7 @@ private:
     void flagBox(std::string& s);
     int checkBoxes(std::string& s);
     bool isValidCoor(std::string& s) const;
+    void expandZeroes(std::string& s);
     std::pair<char, int> parseCoordinates(std::string& s) const;
 
 public:

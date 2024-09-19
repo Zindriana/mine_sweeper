@@ -78,9 +78,6 @@ bool Gameboard::exploreBox(std::string& s) {
 			&& std::get<3>(coor) == false){
 			int amountOfMines = checkBoxes(s);
 			std::get<2>(coor) = '0' + amountOfMines;
-			if (amountOfMines == 0) {
-				//
-			}
 			return false;
 		}
 	}
@@ -119,7 +116,15 @@ int Gameboard::checkBoxes(std::string& s) {
 			}
 		}
 	}
+	if (amountOfMines == 0) {
+		expandZeroes(s);
+	}
 	return amountOfMines;
+}
+
+void Gameboard::expandZeroes(std::string& s) {
+	std::pair<char, int> coordinate = parseCoordinates(s);
+	//lägg till kod, behöver undvika recursion
 }
 
 bool Gameboard::isValidCoor(std::string& s) const {
