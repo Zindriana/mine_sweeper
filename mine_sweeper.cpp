@@ -32,6 +32,11 @@ int main()
         char markChoice;
         std::cout << "Do you want to explore an area or flag an area as dangerous? (e or f)" << std::endl;
         std::cin >> markChoice;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Not a valid character" << std::endl;
+        }
         if (markChoice == 'e' || markChoice == 'f') { //gör om till switch. Lägg till sparalternativ
             kaboom = gameboard.chooseBox(markChoice); //kalla istället på explore/flag/save
             if(markChoice == 'e'){
