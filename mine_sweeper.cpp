@@ -24,7 +24,7 @@ int main()
     gameboard.randomizeMines();
 
     bool kaboom = false;
-    int turns = board_size * board_size - board_size; //antalet turns som behöver spelas innan spelet är vunnet
+    int turns = board_size * board_size - board_size; //ersätt med en funktion som kollar om alla fria rutor är utforskade
     int t = 0; //antal spelade rundor
     std::cout << " turns to survive: " << turns << std::endl;
     while (!kaboom && t < turns ) {
@@ -32,8 +32,8 @@ int main()
         char markChoice;
         std::cout << "Do you want to explore an area or flag an area as dangerous? (e or f)" << std::endl;
         std::cin >> markChoice;
-        if (markChoice == 'e' || markChoice == 'f') {
-            kaboom = gameboard.chooseBox(markChoice);
+        if (markChoice == 'e' || markChoice == 'f') { //gör om till switch. Lägg till sparalternativ
+            kaboom = gameboard.chooseBox(markChoice); //kalla istället på explore/flag/save
             if(markChoice == 'e'){
                 ++t;
                 std::cout << " turns played: " << t << std::endl;

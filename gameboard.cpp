@@ -47,7 +47,7 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::chooseBox(char c) {
+bool Gameboard::chooseBox(char c) { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
 	bool kaboom = false;
 	std::string chosenBox = "";
 	std::cout << "which box do you want to mark?" << std::endl;
@@ -78,6 +78,9 @@ bool Gameboard::exploreBox(std::string& s) {
 			&& std::get<3>(coor) == false){
 			int amountOfMines = checkBoxes(s);
 			std::get<2>(coor) = '0' + amountOfMines;
+			if (amountOfMines == 0) {
+				expandZeroes(s);
+			}
 			return false;
 		}
 	}
@@ -116,15 +119,29 @@ int Gameboard::checkBoxes(std::string& s) {
 			}
 		}
 	}
-	if (amountOfMines == 0) {
-		expandZeroes(s);
-	}
 	return amountOfMines;
 }
 
 void Gameboard::expandZeroes(std::string& s) {
 	std::pair<char, int> coordinate = parseCoordinates(s);
-	//lägg till kod, behöver undvika recursion
+	for (int i = -1; i < 2; ++i) {
+		for (int j = -1; j < 2; ++j) {
+			char char_coor = coordinate.first + i;
+			int int_coor = coordinate.second + j;
+			if (isValidCoor(s) && !(i == 0 && j == 0)) {
+				for (auto& coor : board) {
+					if (std::get<0>(coor) == char_coor
+						&& std::get<1>(coor) == int_coor
+						&& std::get<2>(coor) == ' ') {
+						std::string news;
+						news += static_cast<char>(coordinate.first + i);
+						news += std::to_string(coordinate.second + j);
+						exploreBox(news);
+					}
+				}
+			}
+		}
+	}
 }
 
 bool Gameboard::isValidCoor(std::string& s) const {
