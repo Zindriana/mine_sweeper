@@ -5,21 +5,21 @@
 
 class Gameboard {
 private:
-    std::vector<std::tuple<char, int, char, bool>> board; //[0] to int?
+    std::vector<std::tuple<int, int, char, bool>> board; //changed [0] to int and nothing was detected in the functionality
     int row;
     int column;
     char starting_char = ' ';
     bool mine = false;
-    bool exploreBox(std::string& s);
-    void flagBox(std::string& s);
-    int checkBoxes(std::string& s);
-    bool isValidCoor(std::string& s) const;
-    void expandZeroes(std::string& s);
+    int checkBoxes(std::pair<char, int>& coordinate);
+    bool isValidCoor(std::pair<char, int>& coor) const;
+    void expandZeroes(std::pair<char, int>& coor);
     std::pair<char, int> parseCoordinates(std::string& s) const;
 
 public:
     Gameboard(int row, int column);
     void render() const;
-    bool chooseBox(char c);
+    bool chooseBox();
     void randomizeMines();
+    bool exploreBox(char& c);
+    void flagBox(char& c);
 };

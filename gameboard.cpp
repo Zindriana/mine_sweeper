@@ -6,6 +6,9 @@
 #include <cctype>
 #include <ctime>
 #include <cstdlib>
+#include "input.h"
+
+Input input = Input();
 
 Gameboard::Gameboard(int row, int column) : row(row), column(column) {
 	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
@@ -47,24 +50,25 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::chooseBox(char c) { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
-	bool kaboom = false;
-	std::string chosenBox = "";
-	std::cout << "which box do you want to mark?" << std::endl;
-	std::cin >> chosenBox;
-	if (isValidCoor(chosenBox) && c == 'e') {
-		kaboom = exploreBox(chosenBox);
-	} else if (isValidCoor(chosenBox) && c == 'f') {
-		flagBox(chosenBox);
-	} else {
-		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
-		chooseBox(c);
-	};
-	return kaboom;
-}
+//bool Gameboard::chooseBox() { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
+//	bool kaboom = false;
+//	std::string chosenBox = "";
+//	std::cout << "which box do you want to mark?" << std::endl;
+//	std::cin >> chosenBox;
+//	if (isValidCoor(chosenBox) && c == 'e') {
+//		kaboom = exploreBox(chosenBox);
+//	} else if (isValidCoor(chosenBox) && c == 'f') {
+//		flagBox(chosenBox);
+//	} else {
+//		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
+//		chooseBox(c);
+//	};
+//	return kaboom;
+//}
 
-bool Gameboard::exploreBox(std::string& s) {
-	std::pair<char, int> coordinate = parseCoordinates(s);
+bool Gameboard::exploreBox(char& c) {
+	std::string choosenCoordinates = input.getInput<std::string>("Which coordinate do you want to explore?");
+	std::pair<char, int> coordinate = parseCoordinates(choosenCoordinates);
 
 	for (auto& coor : board) {
 		if (std::get<0>(coor) == coordinate.first
@@ -76,18 +80,19 @@ bool Gameboard::exploreBox(std::string& s) {
 		else if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second
 			&& std::get<3>(coor) == false){
-			int amountOfMines = checkBoxes(s);
+			int amountOfMines = checkBoxes(coordinate);
 			std::get<2>(coor) = '0' + amountOfMines;
-			if (amountOfMines == 0) {
+			/*if (amountOfMines == 0) {
 				expandZeroes(s);
-			}
+			}*/
 			return false;
 		}
 	}
 }
 
-void Gameboard::flagBox(std::string& s) {
-	std::pair<char, int> coordinate = parseCoordinates(s);
+void Gameboard::flagBox(char& c) {
+	std::string choosenCoordinates = input.getInput<std::string>("Which coordinate do you want to flag?");
+	std::pair<char, int> coordinate = parseCoordinates(choosenCoordinates);
 	for (auto& coor : board) {
 		if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second) {
@@ -101,14 +106,14 @@ void Gameboard::flagBox(std::string& s) {
 	}
 }
 
-int Gameboard::checkBoxes(std::string& s) {
+int Gameboard::checkBoxes(std::pair<char, int>& coordinates) {
 	int amountOfMines = 0;
-	std::pair<char, int> coordinate = parseCoordinates(s);
+	std::pair<char, int>& coordinate = coordinates;
 	for (int i = -1; i < 2; ++i) {
 		for (int j = -1; j < 2; ++j) {
 			char char_coor = coordinate.first + i;
 			int int_coor = coordinate.second + j;
-			if (isValidCoor(s) && !(i == 0 && j == 0)) {
+			if (isValidCoor(coordinate) && !(i == 0 && j == 0)) {
 				for (auto& coor : board) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor
@@ -122,30 +127,30 @@ int Gameboard::checkBoxes(std::string& s) {
 	return amountOfMines;
 }
 
-void Gameboard::expandZeroes(std::string& s) {
-	std::pair<char, int> coordinate = parseCoordinates(s);
-	for (int i = -1; i < 2; ++i) {
-		for (int j = -1; j < 2; ++j) {
-			char char_coor = coordinate.first + i;
-			int int_coor = coordinate.second + j;
-			if (isValidCoor(s) && !(i == 0 && j == 0)) {
-				for (auto& coor : board) {
-					if (std::get<0>(coor) == char_coor
-						&& std::get<1>(coor) == int_coor
-						&& std::get<2>(coor) == ' ') {
-						std::string news;
-						news += static_cast<char>(coordinate.first + i);
-						news += std::to_string(coordinate.second + j);
-						exploreBox(news);
-					}
-				}
-			}
-		}
-	}
-}
+//void Gameboard::expandZeroes(std::pair<char, int>& coor) {
+//	std::pair<char, int> coordinate = coor;
+//	for (int i = -1; i < 2; ++i) {
+//		for (int j = -1; j < 2; ++j) {
+//			char char_coor = coordinate.first + i;
+//			int int_coor = coordinate.second + j;
+//			if (isValidCoor(coordinate) && !(i == 0 && j == 0)) {
+//				for (auto& coor : board) {
+//					if (std::get<0>(coor) == char_coor
+//						&& std::get<1>(coor) == int_coor
+//						&& std::get<2>(coor) == ' ') {
+//						std::string news;
+//						news += static_cast<char>(coordinate.first + i);
+//						news += std::to_string(coordinate.second + j);
+//						exploreBox('e');
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
 
-bool Gameboard::isValidCoor(std::string& s) const {
-	std::pair<char, int> coordinate = parseCoordinates(s);
+bool Gameboard::isValidCoor(std::pair<char, int>& coor) const {
+	std::pair<char, int> coordinate = coor;
 	return coordinate.first >= 'a' 
 		&& coordinate.first <= 'a' + row - 1 
 		&& coordinate.second > 0 
