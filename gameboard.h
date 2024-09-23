@@ -2,10 +2,11 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include "input.h"
 
 class Gameboard {
 private:
-    std::vector<std::tuple<char, int, char, bool>> board; //[0] to int?
+    std::vector<std::tuple<int, int, char, bool>> board; //[0] to int?
     int row;
     int column;
     char starting_char = ' ';
