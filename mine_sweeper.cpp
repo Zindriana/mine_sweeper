@@ -5,6 +5,12 @@
 #include <cstdlib>
 #include "input.h"
 
+//TODO 
+// PRIO! = function to save and load the game
+// implement so that the user can choose different amount of rows, columns and mines
+// clean the code
+// be one with the code
+
 int main()
 {
     std::srand(std::time(0));

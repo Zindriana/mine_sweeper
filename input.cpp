@@ -14,7 +14,13 @@ bool Input::isValidCoor(std::string& s) const{
 
 std::pair<char, int> Input::parseCoordinates(std::string& s) const{
 	char char_coor = s[0];
-	int int_coor = std::stoi(s.substr(1));
+	int int_coor = -1;
+	try {
+		int_coor = std::stoi(s.substr(1));
+	}
+	catch (const std::invalid_argument& e) {
+		return std::make_pair(char_coor, -1);
+	}
 	return std::make_pair(char_coor, int_coor);
 }
 
