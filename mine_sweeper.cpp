@@ -24,7 +24,7 @@ int main()
     gameboard.randomizeMines();
 
     bool kaboom = false;
-    int turns = board_size * board_size - board_size; //ersätt med en funktion som kollar om alla fria rutor är utforskade
+    int turns = board_size * board_size - board_size - 1; //ersätt med en funktion som kollar om alla fria rutor är utforskade
     int t = 0; //antal spelade rundor
     std::cout << " turns to survive: " << turns << std::endl;
     while (!kaboom && t < turns ) {
