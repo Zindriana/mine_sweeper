@@ -9,10 +9,10 @@
 #include "input.h"
 
 Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(column), input(input) {
-	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
+	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
 		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
-		}
+			}
 	}
 }
 
@@ -47,22 +47,6 @@ void Gameboard::render() const{
 		std::cout << std::endl;
 	}
 }
-
-//bool Gameboard::chooseBox(char c) { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
-//	bool kaboom = false;
-//	std::string chosenBox = "";
-//	std::cout << "which box do you want to mark?" << std::endl;
-//	std::cin >> chosenBox;
-//	if (isValidCoor(chosenBox) && c == 'e') {
-//		kaboom = exploreBox(chosenBox);
-//	} else if (isValidCoor(chosenBox) && c == 'f') {
-//		flagBox(chosenBox);
-//	} else {
-//		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
-//		chooseBox(c);
-//	};
-//	return kaboom;
-//}
 
 bool Gameboard::exploreBox(std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
@@ -134,30 +118,16 @@ void Gameboard::expandZeroes(std::string& s) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor
 						&& std::get<2>(coor) == ' ') {
-						std::string news;
-						news += static_cast<char>(coordinate.first + i);
-						news += std::to_string(coordinate.second + j);
-						exploreBox(news);
+						std::string newS;
+						newS += static_cast<char>(coordinate.first + i);
+						newS += std::to_string(coordinate.second + j);
+						exploreBox(newS);
 					}
 				}
 			}
 		}
 	}
 }
-
-//bool Gameboard::isValidCoor(std::string& s) const {
-//	std::pair<char, int> coordinate = parseCoordinates(s);
-//	return coordinate.first >= 'a' 
-//		&& coordinate.first <= 'a' + row - 1 
-//		&& coordinate.second > 0 
-//		&& coordinate.second <= column;
-//}
-//
-//std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{ //use this more often
-//	char char_coor = s[0];
-//	int int_coor = std::stoi(s.substr(1));
-//	return std::make_pair(char_coor, int_coor);
-//}
 
 void Gameboard::randomizeMines() {
 	char char_coor;
@@ -172,4 +142,14 @@ void Gameboard::randomizeMines() {
 			}
 		}
 	}
+}
+
+bool Gameboard::checkForVictory() {
+	bool marked = true;
+	for (auto& coor : board) {
+		if(std::get<2>(coor) == ' ' && std::get<3>(coor) == false) {
+			marked = false;
+		}
+	}
+	return marked;
 }

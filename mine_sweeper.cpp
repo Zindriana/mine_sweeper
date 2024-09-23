@@ -11,7 +11,7 @@ int main()
     Input input(2, 2);
     int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
     std::cout << "Welcome to Awesome Minesweeper!\n";
-    
+
     do {
         board_size = input.getInput<int>("How many rows do you want the game board to have?");
         if (board_size < 2 || board_size > 26) {
@@ -25,42 +25,56 @@ int main()
     gameboard.randomizeMines();
 
     bool kaboom = false;
-    int turns = board_size * board_size - board_size - 1; //ersätt med en funktion som kollar om alla fria rutor är utforskade
-    int t = 0; //antal spelade rundor
-    //std::cout << " turns to survive: " << turns << std::endl;
-    while (!kaboom && t < turns ) {
+    bool foundAllMines = false;
+    int t = 0;
+    while (!kaboom && !foundAllMines) {
         gameboard.render();
         std::string coor = "";
         char markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        switch(markChoice){ 
-            case 'e':
-                coor = input.getInput<std::string>("which box do you want to explore?");
+        switch (markChoice) {
+        case 'e':
+            coor = input.getInput<std::string>("which box do you want to explore?");
+            if (input.isValidCoor(coor)) {
                 kaboom = gameboard.exploreBox(coor);
                 t++;
+                std::cout << "Played turns: " << t << std::endl;
                 break;
-            case 'f':
-                coor = input.getInput<std::string>("which box do you want to flag?");
+            }
+            else {
+                std::cout << "Not a valid coordinate, please choose a valid coordinate" << std::endl;
+                break;
+            }
+        case 'f':
+            coor = input.getInput<std::string>("which box do you want to flag?");
+            if (input.isValidCoor(coor)) {
                 gameboard.flagBox(coor);
+                t++;
+                std::cout << "Played turns: " << t << std::endl;
                 break;
-            case 's':
-                std::cout << "Future feature, nothing is saved \n" << std::endl;
+            }
+            else {
+                std::cout << "Not a valid coordinate, please choose a valid coordinate" << std::endl;
                 break;
-            default:
-                std::cout << "Not a valid option, please choose between e/f/s \n" << std::endl;
-                break;
+        case 's':
+            std::cout << "Future feature, nothing is saved \n" << std::endl;
+            break;
+        default:
+            std::cout << "Not a valid option, please choose between e/f/s \n" << std::endl;
+            break;
+            }
         }
-        
-    }
-    
-    gameboard.render();
-    if (kaboom) {
-        std::cout << "KABOOM! Game over" << std::endl;
-    } else {
-        std::cout << "Congratz, you survived. This time..." << std::endl;
-    }
-    
 
+        foundAllMines = gameboard.checkForVictory();
+        if (kaboom) {
+            gameboard.render();
+            std::cout << "KABOOM! Game over" << std::endl;
+        }
+        if (foundAllMines) {
+            gameboard.render();
+            std::cout << "Congratz, you survived. This time..." << std::endl;
+        }
+    }
     return 0;
 }
 
