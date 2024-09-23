@@ -10,13 +10,14 @@ private:
     int column;
     char starting_char = ' ';
     bool mine = false;
+    Input* input;
     int checkBoxes(std::string& s);
     bool isValidCoor(std::string& s) const;
     void expandZeroes(std::string& s);
     std::pair<char, int> parseCoordinates(std::string& s) const;
 
 public:
-    Gameboard(int row, int column);
+    Gameboard(int row, int column, Input* input);
     void render() const;
     //bool chooseBox(char c);
     void randomizeMines();

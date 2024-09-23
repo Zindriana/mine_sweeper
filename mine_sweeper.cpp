@@ -19,9 +19,9 @@ int main()
         }
     } while (board_size < 2 || board_size > 26); // limit is set to 26 so that the maximum row never is more than 'z'
 
-    input.setRow(board_size); //saving the values for the board size so the input objekt can use it's function
+    input.setRow(board_size); //saving the values for the board size so that the input object can use it's functions
     input.setColumn(board_size);
-    Gameboard gameboard = Gameboard(board_size, board_size);
+    Gameboard gameboard = Gameboard(board_size, board_size, &input);
     gameboard.randomizeMines();
 
     bool kaboom = false;

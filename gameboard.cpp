@@ -6,8 +6,9 @@
 #include <cctype>
 #include <ctime>
 #include <cstdlib>
+#include "input.h"
 
-Gameboard::Gameboard(int row, int column) : row(row), column(column) {
+Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(column), input(input) {
 	for (char r = 'a'; r <= 'a' + row; ++r) { //preincrement är effektivare
 		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
@@ -144,19 +145,19 @@ void Gameboard::expandZeroes(std::string& s) {
 	}
 }
 
-bool Gameboard::isValidCoor(std::string& s) const {
-	std::pair<char, int> coordinate = parseCoordinates(s);
-	return coordinate.first >= 'a' 
-		&& coordinate.first <= 'a' + row - 1 
-		&& coordinate.second > 0 
-		&& coordinate.second <= column;
-}
-
-std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{ //use this more often
-	char char_coor = s[0];
-	int int_coor = std::stoi(s.substr(1));
-	return std::make_pair(char_coor, int_coor);
-}
+//bool Gameboard::isValidCoor(std::string& s) const {
+//	std::pair<char, int> coordinate = parseCoordinates(s);
+//	return coordinate.first >= 'a' 
+//		&& coordinate.first <= 'a' + row - 1 
+//		&& coordinate.second > 0 
+//		&& coordinate.second <= column;
+//}
+//
+//std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{ //use this more often
+//	char char_coor = s[0];
+//	int int_coor = std::stoi(s.substr(1));
+//	return std::make_pair(char_coor, int_coor);
+//}
 
 void Gameboard::randomizeMines() {
 	char char_coor;
