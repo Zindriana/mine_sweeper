@@ -157,10 +157,14 @@ bool Gameboard::isValidCoor(std::pair<char, int>& coor) const {
 		&& coordinate.second <= column;
 }
 
-std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{ //use this more often
+std::pair<char, int> Gameboard::parseCoordinates(std::string& s) const{
 	char char_coor = s[0];
 	int int_coor = std::stoi(s.substr(1));
-	return std::make_pair(char_coor, int_coor);
+	std::pair<char, int> coordinate = std::make_pair(char_coor, int_coor);
+	if (isValidCoor(coordinate)) {
+		return std::make_pair(char_coor, int_coor);
+	}	
+	return std::nullopt;
 }
 
 void Gameboard::randomizeMines() {
