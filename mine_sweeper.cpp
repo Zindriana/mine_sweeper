@@ -30,21 +30,24 @@ int main()
     //std::cout << " turns to survive: " << turns << std::endl;
     while (!kaboom && t < turns ) {
         gameboard.render();
+        std::string coor = "";
         char markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::string coor = input.getInput<std::string>("which box do you want to mark?");
         switch(markChoice){ 
             case 'e':
+                coor = input.getInput<std::string>("which box do you want to explore?");
                 kaboom = gameboard.exploreBox(coor);
                 t++;
                 break;
             case 'f':
+                coor = input.getInput<std::string>("which box do you want to flag?");
                 gameboard.flagBox(coor);
                 break;
             case 's':
-                std::cout << "Future feature, nothing is saved" << std::endl;
+                std::cout << "Future feature, nothing is saved \n" << std::endl;
                 break;
             default:
+                std::cout << "Not a valid option, please choose between e/f/s \n" << std::endl;
                 break;
         }
         
