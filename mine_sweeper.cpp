@@ -30,21 +30,20 @@ int main()
     while (!kaboom && t < turns ) {
         gameboard.render();
         char markChoice;
-        std::cout << "Do you want to explore an area or flag an area as dangerous? (e or f)" << std::endl;
-        std::cin >> markChoice;
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Not a valid character" << std::endl;
-        }
-        if (markChoice == 'e' || markChoice == 'f') { //gör om till switch. Lägg till sparalternativ
-            kaboom = gameboard.chooseBox(markChoice); //kalla istället på explore/flag/save
-            if(markChoice == 'e'){
-                ++t;
-                std::cout << " turns played: " << t << std::endl;
-            }  
-        } else {
-            std::cout << "Not a legit choice, choose again" << std::endl;
+        markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
+        switch(markChoice){
+            case 'e':
+                kaboom = gameboard.chooseBox('e');
+                t++;
+                break;
+            case 'f':
+                gameboard.chooseBox('f');
+                break;
+            case 's':
+                std::cout << "Future feature, nothing is saved" << std::endl;
+                break;
+            default:
+                break;
         }
         
     }
