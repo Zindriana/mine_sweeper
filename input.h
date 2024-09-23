@@ -6,8 +6,16 @@ class Input
 {
 
 private:
+    int row;
+    int column;
 
 public:
+
+    Input(int row, int column);
+    bool isValidCoor(std::string& s) const;
+    std::pair<char, int> parseCoordinates(std::string& s) const;
+    void setRow(int r);
+    void setColumn(int c);
 
     template<typename T>
     T getInput(const std::string& prompt) {

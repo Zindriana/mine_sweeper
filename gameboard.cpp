@@ -47,21 +47,21 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::chooseBox(char c) { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
-	bool kaboom = false;
-	std::string chosenBox = "";
-	std::cout << "which box do you want to mark?" << std::endl;
-	std::cin >> chosenBox;
-	if (isValidCoor(chosenBox) && c == 'e') {
-		kaboom = exploreBox(chosenBox);
-	} else if (isValidCoor(chosenBox) && c == 'f') {
-		flagBox(chosenBox);
-	} else {
-		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
-		chooseBox(c);
-	};
-	return kaboom;
-}
+//bool Gameboard::chooseBox(char c) { //omvänd ordning, den här metoden ska kallas på från exploreBox och flagBox
+//	bool kaboom = false;
+//	std::string chosenBox = "";
+//	std::cout << "which box do you want to mark?" << std::endl;
+//	std::cin >> chosenBox;
+//	if (isValidCoor(chosenBox) && c == 'e') {
+//		kaboom = exploreBox(chosenBox);
+//	} else if (isValidCoor(chosenBox) && c == 'f') {
+//		flagBox(chosenBox);
+//	} else {
+//		std::cout << "Not a valid coordinate, choose a legal target" << std::endl;
+//		chooseBox(c);
+//	};
+//	return kaboom;
+//}
 
 bool Gameboard::exploreBox(std::string& s) {
 	std::pair<char, int> coordinate = parseCoordinates(s);
