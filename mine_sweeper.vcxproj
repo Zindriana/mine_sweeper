@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fileManagement.cpp" />
     <ClCompile Include="gameboard.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="mine_sweeper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="fileManagement.h" />
     <ClInclude Include="gameboard.h" />
     <ClInclude Include="input.h" />
   </ItemGroup>

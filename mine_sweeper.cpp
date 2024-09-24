@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cstdlib>
 #include "input.h"
+#include "fileManagement.h"
 
 //TODO 
 // PRIO! = function to save and load the game
@@ -11,10 +12,14 @@
 // clean the code
 // be one with the code
 
+
+
 int main()
 {
     std::srand(std::time(0));
     Input input(2, 2);
+    FileManagement fileManagment("testSave.txt");
+    fileManagment.write("Testar att spara");
     int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
     std::cout << "Welcome to Awesome Minesweeper!\n";
 
@@ -48,7 +53,7 @@ int main()
                 break;
             }
             else {
-                std::cout << "Not a valid coordinate, please choose a valid coordinate" << std::endl;
+                std::cout << "Not a valid coordinate, please choose a valid coordinate \n" << std::endl;
                 break;
             }
         case 'f':
