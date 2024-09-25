@@ -2,11 +2,8 @@
 #include <iostream>
 
 FileManagement::FileManagement(const std::string& filename) {
-    file.open(filename, std::ios::out);
+    file.open(filename, std::ios::out | std::ios::app);
     infile.open(filename, std::ios::in);
-    if (!file.is_open() || !infile.is_open()) {
-        std::cout << "Couldn´t open file" << std::endl;
-    }
 }
 
 FileManagement::~FileManagement() {

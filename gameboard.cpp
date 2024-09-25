@@ -13,10 +13,12 @@ Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(colum
 	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
 		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
+			//call for randomizeMines here instead of in the main class
 		}
 	}
 }
 
+//probably can stay here, but would be nice to have it in fileManagement instead
 void Gameboard::saveBoard(const std::string& filename) {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -30,26 +32,6 @@ void Gameboard::saveBoard(const std::string& filename) {
 			<< std::get<1>(cell) << " "
 			<< std::get<2>(cell) << " "
 			<< std::get<3>(cell) << std::endl;
-	}
-
-	file.close();
-}
-
-void Gameboard::loadBoard(const std::string& filename) {
-	std::ifstream file(filename);
-	if (!file.is_open()) {
-		std::cout << "Could not open file" << std::endl;
-		return;
-	}
-
-	file >> row >> column;
-	board.clear();
-	char r;
-	size_t c;
-	char starting_char;
-	bool mine;
-	while (file >> r >> c >> starting_char >> mine) {
-		board.push_back(std::make_tuple(r, c, starting_char, mine));
 	}
 
 	file.close();
@@ -115,7 +97,7 @@ void Gameboard::flagBox(std::string& s) {
 	for (auto& coor : board) {
 		if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second) {
-			if (std::get<2>(coor) == ' ') {
+			if (std::get<2>(coor) == '?') {
 				std::get<2>(coor) = 'F';
 			}
 			else {
@@ -156,7 +138,7 @@ void Gameboard::expandZeroes(std::string& s) {
 				for (auto& coor : board) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor
-						&& std::get<2>(coor) == ' ') {
+						&& std::get<2>(coor) == '?') {
 						std::string newS;
 						newS += static_cast<char>(coordinate.first + i);
 						newS += std::to_string(coordinate.second + j);
@@ -186,13 +168,14 @@ void Gameboard::randomizeMines() {
 bool Gameboard::checkForVictory() {
 	bool marked = true;
 	for (auto& coor : board) {
-		if(std::get<2>(coor) == ' ' && std::get<3>(coor) == false) {
+		if(std::get<2>(coor) == '?' && std::get<3>(coor) == false) {
 			marked = false;
 		}
 	}
 	return marked;
 }
 
+//can probably stay here, maybe have it in fileManagement
 void Gameboard::setCell(int r, int c, char value, bool isMine) {
 	for (auto& cell : board) {
 		if (std::get<0>(cell) == r && std::get<1>(cell) == c) {
