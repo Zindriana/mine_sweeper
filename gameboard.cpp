@@ -7,6 +7,7 @@
 #include <ctime>
 #include <cstdlib>
 #include "input.h"
+#include <fstream>
 
 Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(column), input(input) {
 	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
@@ -14,6 +15,44 @@ Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(colum
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
 		}
 	}
+}
+
+void Gameboard::saveBoard(const std::string& filename) {
+	std::ofstream file(filename);
+	if (!file.is_open()) {
+		std::cout << "Could not open file for writing!" << std::endl;
+		return;
+	}
+
+	file << row << " " << column << std::endl;
+	for (const auto& cell : board) {
+		file << std::get<0>(cell) << " "
+			<< std::get<1>(cell) << " "
+			<< std::get<2>(cell) << " "
+			<< std::get<3>(cell) << std::endl;
+	}
+
+	file.close();
+}
+
+void Gameboard::loadBoard(const std::string& filename) {
+	std::ifstream file(filename);
+	if (!file.is_open()) {
+		std::cout << "Could not open file" << std::endl;
+		return;
+	}
+
+	file >> row >> column;
+	board.clear();
+	char r;
+	size_t c;
+	char starting_char;
+	bool mine;
+	while (file >> r >> c >> starting_char >> mine) {
+		board.push_back(std::make_tuple(r, c, starting_char, mine));
+	}
+
+	file.close();
 }
 
 void Gameboard::render() const{
@@ -152,4 +191,14 @@ bool Gameboard::checkForVictory() {
 		}
 	}
 	return marked;
+}
+
+void Gameboard::setCell(int r, int c, char value, bool isMine) {
+	for (auto& cell : board) {
+		if (std::get<0>(cell) == r && std::get<1>(cell) == c) {
+			std::get<2>(cell) = value;
+			std::get<3>(cell) = isMine;
+			break;
+		}
+	}
 }
