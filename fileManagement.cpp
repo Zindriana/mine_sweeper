@@ -15,14 +15,14 @@ FileManagement::~FileManagement() {
     }
 }
 
-void FileManagement::write(const std::string& text) {
-    if (file.is_open()) {
-        file << text << std::endl;
-    }
-    else {
-        std::cout << "File is not open" << std::endl;
-    }
-}
+//void FileManagement::write(const std::string& text) {
+//    if (file.is_open()) {
+//        file << text << std::endl;
+//    }
+//    else {
+//        std::cout << "File is not open" << std::endl;
+//    }
+//}
 
 std::istringstream FileManagement::read() {
     std::string content;

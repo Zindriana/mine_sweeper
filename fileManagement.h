@@ -7,7 +7,7 @@ class FileManagement {
 public:
     FileManagement(const std::string& filename);
     ~FileManagement();
-    void write(const std::string& text);
+    //void write(const std::string& text);
     std::istringstream read();
 
 private:
