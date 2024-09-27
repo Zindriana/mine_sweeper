@@ -31,6 +31,7 @@ int main()
     //int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
     int rows = 0;
     int columns = 0;
+    int startingMines = 0;
 
     std::cout << "Welcome to Awesome Minesweeper!\n" << std::endl;
     while (markChoice != 's' && markChoice != 'c') {
@@ -40,21 +41,22 @@ int main()
             do {
                 rows = input.getInput<int>("How many rows do you want the game board to have?");
                 columns = input.getInput<int>("How many columns do you want the game board to have?");
-                if ((rows < 2 || rows > 26) || (columns < 2 || columns > 10)) {
-                    std::cout << "Rows need to be more than one and less then 27 and columns need to be more than 2 and less than 11" << std::endl;
+                startingMines = input.getInput<int>("How many mines do you want the game board to have?");
+                if ((rows < 2 || rows > 26) || (columns < 2 || columns > 10) || (startingMines < 2 || startingMines >= rows*columns)) {
+                    std::cout << "Rows need to be more than one and less then 27 \n and columns need to be more than 2 and less than 11 \n and mines need to be more than 1 and less than the amount of areas to explore\n" << std::endl;
                 }
-            } while ((rows < 2 || rows > 26) || (columns < 2 || columns > 10)); 
+            } while ((rows < 2 || rows > 26) || (columns < 2 || columns > 10) || (startingMines < 2 || startingMines >= rows * columns));
             // row limit is set to 26 so that the maximum row never is more than 'z'
             //column limit is set to 10 because of the UI in the terminal is not user friendly for more than 10 columns with the current
-            // render()-method in the gameboard class. Can be fixed so the column limit could be much higher
+                // render()-method in the gameboard class. Can be fixed so the column limit could be much higher
 
             //saving the values for the board size (rows and columns) so that the input object can use it's functions
             input.setRow(rows); 
             input.setColumn(columns);
 
             gameboard = new Gameboard(rows, columns, &input);
-            gameboard->randomizeMines(); //move this to be called in the constructor instead
-            //kept it here to avoid bugs when loading a previous game
+            gameboard->randomizeMines(startingMines); //(move this to be called in the constructor instead)
+                //kept it here to avoid bugs when loading a previous game
             break;
         case 'c': {
             std::istringstream stream = fileManagment.read();

@@ -151,10 +151,10 @@ void Gameboard::expandZeroes(std::string& s) {
 	}
 }
 
-void Gameboard::randomizeMines() {
+void Gameboard::randomizeMines(int startingMines) {
 	char char_coor;
 	int char_int;
-	for (size_t i = 0; i <= row; ++i) {
+	for (size_t i = 0; i <= startingMines; ++i) {
 		char_coor = 'a' + std::rand() % row;
 		char_int = 1 + std::rand() % column;
 		for (auto& coor : board) {

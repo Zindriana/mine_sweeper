@@ -19,7 +19,7 @@ public:
     Gameboard(int row, int column, Input* input);
     void saveBoard(const std::string& filename);
     void render() const;
-    void randomizeMines(); //maybe move this to private and move the call from main class to be called when initializing the Gameboard constructor
+    void randomizeMines(int amountOfMines); //maybe move this to private and move the call from main class to be called when initializing the Gameboard constructor
     bool exploreBox(std::string& s);
     void flagBox(std::string& s);
     bool checkForVictory();
