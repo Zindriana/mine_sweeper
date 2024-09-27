@@ -6,7 +6,7 @@
 #include "input.h"
 #include "fileManagement.h"
 
-//TODO
+//TODO (if the project would have more time and additional updates)
 // clean the code,
 //          some code can probably be deleted
 //          move stuff from main to relevant classes or new classes
@@ -24,7 +24,6 @@ int main()
     Input input(2, 2);
     Gameboard* gameboard = nullptr;
     char markChoice = 'a';
-    //int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
     int rows = 0;
     int columns = 0;
     int startingMines = 0;
