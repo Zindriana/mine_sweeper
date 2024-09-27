@@ -83,10 +83,11 @@ int main()
         }
     }
 
-    bool kaboom = false; //The player lose the game when this change to true, which happens when a player trips on a mine
+    bool kaboom = false; //The player lose the game when this changes to true, which happens when a player trips on a mine (e.g. explore an area containing a mine
     int t = 0; //amount of turns the player has played
     while (!kaboom) {
         gameboard->render();
+        std::cout << "Turn: " << t << std::endl;
         std::string coor = "";
         markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -96,7 +97,6 @@ int main()
             if (input.isValidCoor(coor)) {
                 kaboom = gameboard->exploreBox(coor);
                 t++;
-                std::cout << "Played turns: " << t << std::endl;
                 break;
             }
             else {
@@ -108,7 +108,6 @@ int main()
             if (input.isValidCoor(coor)) {
                 gameboard->flagBox(coor);
                 t++;
-                std::cout << "Played turns: " << t << std::endl;
                 break;
             }
             else {

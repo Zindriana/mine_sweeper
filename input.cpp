@@ -4,7 +4,7 @@ Input::Input(int row, int column) : row(row), column(column) {
 
 }
 
-bool Input::isValidCoor(std::string& s) const{
+bool Input::isValidCoor(const std::string& s) const{
 	std::pair<char, int> coordinate = parseCoordinates(s);
 	return coordinate.first >= 'a'
 		&& coordinate.first <= 'a' + row - 1
@@ -12,7 +12,7 @@ bool Input::isValidCoor(std::string& s) const{
 		&& coordinate.second <= column;
 }
 
-std::pair<char, int> Input::parseCoordinates(std::string& s) const{
+std::pair<char, int> Input::parseCoordinates(const std::string& s) const{
 	char char_coor = s[0];
 	int int_coor = -1;
 	try {

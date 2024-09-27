@@ -12,13 +12,14 @@ private:
 public:
 
     Input(int row, int column);
-    bool isValidCoor(std::string& s) const;
-    std::pair<char, int> parseCoordinates(std::string& s) const;
+    bool isValidCoor(const std::string& s) const;
+    std::pair<char, int> parseCoordinates(const std::string& s) const;
     void setRow(int r);
     void setColumn(int c);
 
     template<typename T>
-    T getInput(const std::string& prompt) {
+    T getInput(const std::string& prompt) { //could add a second parameter here with a validation argument, for example legit range for int.
+        //This sould create better error handling and would reduce the amount of lines in the main class
         T input;
         bool validInput = false;
 
