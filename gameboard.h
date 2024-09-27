@@ -6,7 +6,7 @@
 
 class Gameboard {
 private:
-    std::vector<std::tuple<int, int, char, bool>> board; //changed [0] to int from char, didn´t find any difference in functionality when testing code?
+    std::vector<std::tuple<int, int, char, bool>> board; //changed [0] to int from char, didn´t find any difference in functionality when testing code
     int row;
     int column;
     char starting_char = '?';

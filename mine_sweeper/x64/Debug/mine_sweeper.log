@@ -1,5 +1,3 @@
-﻿  fileManagement.cpp
-  mine_sweeper.cpp
-C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\mine_sweeper.cpp(25,25): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
+﻿  mine_sweeper.cpp
+C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\mine_sweeper.cpp(24,25): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   mine_sweeper.vcxproj -> C:\Users\rtgbv\Desktop\Scriptomancy\mu23\cpp\mine_sweeper\x64\Debug\mine_sweeper.exe

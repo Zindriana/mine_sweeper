@@ -7,7 +7,6 @@
 #include "fileManagement.h"
 
 //TODO 
-// go through the code and add destructor and delete where needed
 // add error handling to save and load methods
 // implement so that the user can choose different amount of rows, columns and mines
 // clean the code,
@@ -29,7 +28,9 @@ int main()
     Input input(2, 2);
     Gameboard* gameboard = nullptr;
     char markChoice = 'a';
-    int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
+    //int board_size; //using board_size instead of separate row and column for the moment, implement different values in the future
+    int rows = 0;
+    int columns = 0;
 
     std::cout << "Welcome to Awesome Minesweeper!\n" << std::endl;
     while (markChoice != 's' && markChoice != 'c') {
@@ -37,26 +38,27 @@ int main()
         switch (markChoice) {
         case 's':
             do {
-                board_size = input.getInput<int>("How many rows do you want the game board to have?");
-                if (board_size < 2 || board_size > 26) {
-                    std::cout << "Rows need to be more than one and less then 27" << std::endl;
+                rows = input.getInput<int>("How many rows do you want the game board to have?");
+                columns = input.getInput<int>("How many columns do you want the game board to have?");
+                if ((rows < 2 || rows > 26) || (columns < 2 || columns > 10)) {
+                    std::cout << "Rows need to be more than one and less then 27 and columns need to be more than 2 and less than 11" << std::endl;
                 }
-            } while (board_size < 2 || board_size > 26); // limit is set to 26 so that the maximum row never is more than 'z'
+            } while ((rows < 2 || rows > 26) || (columns < 2 || columns > 10)); 
+            // row limit is set to 26 so that the maximum row never is more than 'z'
+            //column limit is set to 10 because of the UI in the terminal is not user friendly for more than 10 columns with the current
+            // render()-method in the gameboard class. Can be fixed so the column limit could be much higher
 
-            //saving the values for the board size so that the input object can use it's functions
-            input.setRow(board_size); 
-            input.setColumn(board_size);
+            //saving the values for the board size (rows and columns) so that the input object can use it's functions
+            input.setRow(rows); 
+            input.setColumn(columns);
 
-            gameboard = new Gameboard(board_size, board_size, &input);
+            gameboard = new Gameboard(rows, columns, &input);
             gameboard->randomizeMines(); //move this to be called in the constructor instead
+            //kept it here to avoid bugs when loading a previous game
             break;
         case 'c': {
             std::istringstream stream = fileManagment.read();
             std::string line;
-
-            //these two can be moved to outside of the switch when implementing the option for different ranges for row and column
-            int rows = 0;
-            int columns = 0;
 
             if (std::getline(stream, line)) {
                 std::istringstream firstLine(line);
@@ -84,10 +86,9 @@ int main()
         }
     }
 
-    bool kaboom = false;
-    bool foundAllMines = false;
+    bool kaboom = false; //The player lose the game when this change to true, which happens when a player trips on a mine
     int t = 0; //amount of turns the player has played
-    while (!kaboom && !foundAllMines) {
+    while (!kaboom) {
         gameboard->render();
         std::string coor = "";
         markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
@@ -118,7 +119,6 @@ int main()
                 break;
         case 's':
             gameboard->saveBoard("testSave.txt");
-            std::cout << "Game board is saved \n" << std::endl; //this line can be moved to the saveBoard
             break;
         default:
             std::cout << "Not a valid option, please choose between e/f/s \n" << std::endl;
@@ -126,15 +126,15 @@ int main()
             }
         }
 
-        foundAllMines = gameboard->checkForVictory();
         if (kaboom) {
             gameboard->render();
             std::cout << "KABOOM! Game over" << std::endl;
         }
-        if (foundAllMines) {
+        if (gameboard->checkForVictory()) {
             gameboard->render();
             std::cout << "Congratz, you survived. This time..." << std::endl;
         }
     }
+    delete gameboard;
     return 0;
 }

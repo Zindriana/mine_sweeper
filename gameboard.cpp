@@ -10,15 +10,16 @@
 #include <fstream>
 
 Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(column), input(input) {
-	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare
-		for (size_t c = 1; c <= column; ++c) { //postincrement behöver skapa en kopia först
+	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare, postincrement behöver skapa en kopia först
+		for (size_t c = 1; c <= column; ++c) {
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
-			//call for randomizeMines here instead of in the main class
+			//call for randomizeMines() here instead of in the main class
+			//didn´t move randomizeMines() to this place, because it would probably created bugs when loading an existing file
 		}
 	}
 }
 
-//probably can stay here, but would be nice to have it in fileManagement instead
+//probably can stay here, but would be nice to have it in fileManagement class instead
 void Gameboard::saveBoard(const std::string& filename) {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -33,7 +34,7 @@ void Gameboard::saveBoard(const std::string& filename) {
 			<< std::get<2>(cell) << " "
 			<< std::get<3>(cell) << std::endl;
 	}
-
+	std::cout << "Game board is saved \n" << std::endl;
 	file.close();
 }
 
@@ -175,7 +176,7 @@ bool Gameboard::checkForVictory() {
 	return marked;
 }
 
-//can probably stay here, maybe have it in fileManagement
+//can probably stay here, maybe have it in the fileManagement class
 void Gameboard::setCell(int r, int c, char value, bool isMine) {
 	for (auto& cell : board) {
 		if (std::get<0>(cell) == r && std::get<1>(cell) == c) {

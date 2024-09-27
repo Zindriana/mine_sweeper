@@ -15,14 +15,15 @@ FileManagement::~FileManagement() {
     }
 }
 
-//void FileManagement::write(const std::string& text) {
-//    if (file.is_open()) {
-//        file << text << std::endl;
-//    }
-//    else {
-//        std::cout << "File is not open" << std::endl;
-//    }
-//}
+//Saving the gameboard happens in the gameboard class right now, would be nice to have all filemanagement in the same class
+    //void filemanagement::write(const std::string& text) {
+    //    if (file.is_open()) {
+    //        file << text << std::endl;
+    //    }
+    //    else {
+    //        std::cout << "file is not open" << std::endl;
+    //    }
+    //}
 
 std::istringstream FileManagement::read() {
     std::string content;
