@@ -70,7 +70,7 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::exploreBox(std::string& s) {
+bool Gameboard::exploreBox(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 
 	for (auto& coor : board) {
@@ -93,7 +93,7 @@ bool Gameboard::exploreBox(std::string& s) {
 	}
 }
 
-void Gameboard::flagBox(std::string& s) {
+void Gameboard::flagBox(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (auto& coor : board) {
 		if (std::get<0>(coor) == coordinate.first
@@ -108,7 +108,7 @@ void Gameboard::flagBox(std::string& s) {
 	}
 }
 
-int Gameboard::checkBoxes(std::string& s) {
+int Gameboard::checkBoxes(const std::string& s) {
 	int amountOfMines = 0;
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (int i = -1; i < 2; ++i) {
@@ -129,7 +129,9 @@ int Gameboard::checkBoxes(std::string& s) {
 	return amountOfMines;
 }
 
-void Gameboard::expandZeroes(std::string& s) {
+//this method is called when the player explore a box that neither contains a mine nor has any adjacent mines
+//it then loop through all adjacent nonexplored nonflagged cells and call the exploreCell()
+void Gameboard::expandZeroes(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (int i = -1; i < 2; ++i) {
 		for (int j = -1; j < 2; ++j) {
@@ -151,7 +153,8 @@ void Gameboard::expandZeroes(std::string& s) {
 	}
 }
 
-void Gameboard::randomizeMines(int startingMines) {
+//method that add and randomize mines when creating a new gameboard
+void Gameboard::randomizeMines(const int startingMines) {
 	char char_coor;
 	int char_int;
 	for (size_t i = 0; i <= startingMines; ++i) {
@@ -177,7 +180,7 @@ bool Gameboard::checkForVictory() {
 }
 
 //can probably stay here, maybe have it in the fileManagement class
-void Gameboard::setCell(int r, int c, char value, bool isMine) {
+void Gameboard::setCell(const int r, const int c, const char value, const bool isMine) { //r = row, c=column, value= symbol that display on the board
 	for (auto& cell : board) {
 		if (std::get<0>(cell) == r && std::get<1>(cell) == c) {
 			std::get<2>(cell) = value;
