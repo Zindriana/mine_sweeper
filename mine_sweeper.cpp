@@ -6,16 +6,12 @@
 #include "input.h"
 #include "fileManagement.h"
 
-//TODO 
-// add error handling to save and load methods
-// implement so that the user can choose different amount of rows, columns and mines
+//TODO
 // clean the code,
 //          some code can probably be deleted
 //          move stuff from main to relevant classes or new classes
-//          control if some public methods instead can be private
 //          check if some parameters in method can be set to const
 //          check if methods and/or variables can be refactored
-// be one with the code
 
 
 
