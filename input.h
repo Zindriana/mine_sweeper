@@ -6,6 +6,7 @@ class Input
 {
 
 private:
+    //these variables are here so that an instance of this class knows of big the gameboard is
     int row;
     int column;
 
@@ -18,8 +19,8 @@ public:
     void setColumn(int c);
 
     template<typename T>
-    T getInput(const std::string& prompt) { //could add a second parameter here with a validation argument, for example legit range for int.
-        //This sould create better error handling and would reduce the amount of lines in the main class
+    T getInput(const std::string& prompt) { //could add a second parameter here with a validation argument, for example a legit range for int.
+        //This should create better error handling and would reduce the amount of lines in the main class
         T input;
         bool validInput = false;
 

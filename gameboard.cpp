@@ -9,17 +9,19 @@
 #include "input.h"
 #include <fstream>
 
-Gameboard::Gameboard(int row, int column, Input* input) : row(row), column(column), input(input) {
-	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement är effektivare, postincrement behöver skapa en kopia först
+//Constructor
+Gameboard::Gameboard(const int row, const int column, const Input* input) : row(row), column(column), input(input) {
+	for (char r = 'a'; r < 'a' + row; ++r) { //preincrement is more effective, because postincrement needs to creata a copy first
 		for (size_t c = 1; c <= column; ++c) {
 			board.push_back(std::make_tuple(r, c, starting_char, mine));
 			//call for randomizeMines() here instead of in the main class
-			//didn´t move randomizeMines() to this place, because it would probably created bugs when loading an existing file
+			//didn´t move randomizeMines() to this place, because it would probably create bugs when loading an existing file
 		}
 	}
 }
 
-//probably can stay here, but would be nice to have it in fileManagement class instead
+//Method that saves the current state of the board to a .txt-file.
+//This method can probably stay here in this class for now, but it would be nice to have it in fileManagement class instead
 void Gameboard::saveBoard(const std::string& filename) {
 	std::ofstream file(filename);
 	if (!file.is_open()) {
@@ -38,6 +40,7 @@ void Gameboard::saveBoard(const std::string& filename) {
 	file.close();
 }
 
+//This method renders the gameboard in the terminal 
 void Gameboard::render() const{
 	std::cout << "  ";
 	for (size_t c = 1; c <= column; ++c) {
@@ -70,7 +73,9 @@ void Gameboard::render() const{
 	}
 }
 
-bool Gameboard::exploreBox(const std::string& s) {
+//This method controls if a cell contains a mine or not. If it contains a mine, it returns true and the game is over
+//If false, then the method first calls checkCells() and eventually also expandZeroes()
+bool Gameboard::exploreCell(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 
 	for (auto& coor : board) {
@@ -83,7 +88,7 @@ bool Gameboard::exploreBox(const std::string& s) {
 		else if (std::get<0>(coor) == coordinate.first
 			&& std::get<1>(coor) == coordinate.second
 			&& std::get<3>(coor) == false){
-			int amountOfMines = checkBoxes(s);
+			int amountOfMines = checkCells(s);
 			std::get<2>(coor) = '0' + amountOfMines;
 			if (amountOfMines == 0) {
 				expandZeroes(s);
@@ -93,7 +98,8 @@ bool Gameboard::exploreBox(const std::string& s) {
 	}
 }
 
-void Gameboard::flagBox(const std::string& s) {
+//Method that mark a cell as flagged (changing the cells graphic to an 'F')
+void Gameboard::flagCell(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (auto& coor : board) {
 		if (std::get<0>(coor) == coordinate.first
@@ -108,7 +114,8 @@ void Gameboard::flagBox(const std::string& s) {
 	}
 }
 
-int Gameboard::checkBoxes(const std::string& s) {
+//This method is called from exploreCell(), it loop through all adjacent cells to check how many mines that are adjacent to the explored cell
+int Gameboard::checkCells(const std::string& s) {
 	int amountOfMines = 0;
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (int i = -1; i < 2; ++i) {
@@ -129,8 +136,8 @@ int Gameboard::checkBoxes(const std::string& s) {
 	return amountOfMines;
 }
 
-//this method is called when the player explore a box that neither contains a mine nor has any adjacent mines
-//it then loop through all adjacent nonexplored nonflagged cells and call the exploreCell()
+//This method is called when the player explore a cell that neither contains a mine nor has any adjacent mines,
+//it then loops through all adjacent nonexplored nonflagged cells and call the exploreCell()
 void Gameboard::expandZeroes(const std::string& s) {
 	std::pair<char, int> coordinate = input->parseCoordinates(s);
 	for (int i = -1; i < 2; ++i) {
@@ -141,11 +148,11 @@ void Gameboard::expandZeroes(const std::string& s) {
 				for (auto& coor : board) {
 					if (std::get<0>(coor) == char_coor
 						&& std::get<1>(coor) == int_coor
-						&& std::get<2>(coor) == '?') {
+						&& std::get<2>(coor) == '?') { //'?' = nonexplored nonflagged cell
 						std::string newS;
 						newS += static_cast<char>(coordinate.first + i);
 						newS += std::to_string(coordinate.second + j);
-						exploreBox(newS);
+						exploreCell(newS);
 					}
 				}
 			}
@@ -153,7 +160,7 @@ void Gameboard::expandZeroes(const std::string& s) {
 	}
 }
 
-//method that add and randomize mines when creating a new gameboard
+//Method that adds and randomizes mine placements when creating a new gameboard
 void Gameboard::randomizeMines(const int startingMines) {
 	char char_coor;
 	int char_int;
@@ -161,7 +168,7 @@ void Gameboard::randomizeMines(const int startingMines) {
 		char_coor = 'a' + std::rand() % row;
 		char_int = 1 + std::rand() % column;
 		for (auto& coor : board) {
-			if (std::get<0>(coor) == char_coor && std::get<1>(coor) == char_int) {
+			if (std::get<0>(coor) == char_coor && std::get<1>(coor) == char_int && std::get<3>(coor) == false ) {//get<3> == false was added to avoid that a mine is placed where there already exists a mine
 				std::get<3>(coor) = true;
 				break;
 			}
@@ -179,8 +186,8 @@ bool Gameboard::checkForVictory() {
 	return marked;
 }
 
-//can probably stay here, maybe have it in the fileManagement class
-void Gameboard::setCell(const int r, const int c, const char value, const bool isMine) { //r = row, c=column, value= symbol that display on the board
+//This method can probably stay here, maybe could have been moved to the fileManagement class
+void Gameboard::setCell(const int r, const int c, const char value, const bool isMine) { //r = row, c=column, value= symbol that is displayd on the board
 	for (auto& cell : board) {
 		if (std::get<0>(cell) == r && std::get<1>(cell) == c) {
 			std::get<2>(cell) = value;

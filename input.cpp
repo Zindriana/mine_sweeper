@@ -4,6 +4,7 @@ Input::Input(int row, int column) : row(row), column(column) {
 
 }
 
+//Method that checks that the coordinate is within the gameboard limits
 bool Input::isValidCoor(const std::string& s) const{
 	std::pair<char, int> coordinate = parseCoordinates(s);
 	return coordinate.first >= 'a'
@@ -12,6 +13,7 @@ bool Input::isValidCoor(const std::string& s) const{
 		&& coordinate.second <= column;
 }
 
+//Method that checks that the player input is a valid format for a coordinate
 std::pair<char, int> Input::parseCoordinates(const std::string& s) const{
 	char char_coor = s[0];
 	int int_coor = -1;

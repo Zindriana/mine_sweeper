@@ -12,16 +12,16 @@ private:
     char starting_char = '?';
     bool mine = false;
     Input* input;
-    int checkBoxes(const std::string& s);
+    int checkCells(const std::string& s);
     void expandZeroes(const std::string& s);
 
 public:
-    Gameboard(int row, int column, Input* input);
+    Gameboard(const int row, const int column, const Input* input);
     void saveBoard(const std::string& filename);
     void render() const;
     void randomizeMines(const int amountOfMines); //maybe move this to private and move the call from main class to be called when initializing the Gameboard constructor
-    bool exploreBox(const std::string& s);
-    void flagBox(const std::string& s);
+    bool exploreCell(const std::string& s);
+    void flagCell(const std::string& s);
     bool checkForVictory();
     void setCell(const int x, const int y, const char value, const bool isMine);
 };

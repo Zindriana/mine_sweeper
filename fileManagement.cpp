@@ -1,11 +1,13 @@
 #include "FileManagement.h"
 #include <iostream>
 
+//Constructor
 FileManagement::FileManagement(const std::string& filename) {
     file.open(filename, std::ios::out | std::ios::app);
     infile.open(filename, std::ios::in);
 }
 
+//Destructor
 FileManagement::~FileManagement() {
     if (file.is_open()) {
         file.close();
@@ -25,6 +27,7 @@ FileManagement::~FileManagement() {
     //    }
     //}
 
+//Getting the info from a txt.file 
 std::istringstream FileManagement::read() {
     std::string content;
     std::string line;

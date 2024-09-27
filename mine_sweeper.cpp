@@ -6,19 +6,22 @@
 #include "input.h"
 #include "fileManagement.h"
 
-//TODO (if the project would have more time and additional updates)
+//TODO (if the project would have had more time and additional updates)
+// the input class could handle some more of the error handling, reducing the lines here in the main class
+// maybe change from only one predetermined save file to option for the player to create and name their own files
 // clean the code,
-//          some code can probably be deleted
+//          some code could maybe be deleted or at least be more efficient
 //          move stuff from main to relevant classes or new classes
-//          check if some parameters in method can be set to const
-//          check if methods and/or variables can be refactored
+//              both of the switch cases below could be rewritten with calls to new methods of functions
+//          check if more methods and/or variables can be refactored
+//              some of the methods in the gameboard class are somewhat clunky, refactor those
 
 
 
 int main()
 {
     std::srand(std::time(0));
-    FileManagement fileManagment("testSave.txt");
+    FileManagement fileManagment("mineSweeperSave.txt"); //create a new (or connect to an existing) save file
 
     //needed to initialize these variables here, because not possible to initialize in the following switch
     Input input(2, 2);
@@ -33,7 +36,7 @@ int main()
         markChoice = input.getInput<char>("Do you want to (s)tart a new game or (c)ontinue a previous game? s/c ");
         switch (markChoice) {
         case 's':
-            do {
+            do { //the error handling could be handled separately if the getInput<> is upgraded. This would also reduce the amount of lines here. See the input-class
                 rows = input.getInput<int>("How many rows do you want the game board to have?");
                 columns = input.getInput<int>("How many columns do you want the game board to have?");
                 startingMines = input.getInput<int>("How many mines do you want the game board to have?");
@@ -49,25 +52,25 @@ int main()
             input.setRow(rows); 
             input.setColumn(columns);
 
-            gameboard = new Gameboard(rows, columns, &input);
+            gameboard = new Gameboard(rows, columns, &input); //creating a new gameboard with the user´s input from above
             gameboard->randomizeMines(startingMines); //(move this to be called in the constructor instead)
                 //kept it here to avoid bugs when loading a previous game
             break;
         case 'c': {
-            std::istringstream stream = fileManagment.read();
+            std::istringstream stream = fileManagment.read(); //recieving the info from the save file
             std::string line;
 
             if (std::getline(stream, line)) {
                 std::istringstream firstLine(line);
-                firstLine >> rows >> columns;
+                firstLine >> rows >> columns; //getting the size for the gameboard
             }
 
             input.setRow(rows);
             input.setColumn(columns);
 
-            gameboard = new Gameboard(rows, columns, &input);
+            gameboard = new Gameboard(rows, columns, &input); //creating the saved gameboard with the right size
 
-            while (std::getline(stream, line)) {
+            while (std::getline(stream, line)) { //loop that add the saved info into each cell on the board
                 std::istringstream cellStream(line);
                 int r, c;
                 char value;
@@ -88,14 +91,14 @@ int main()
     while (!kaboom) {
         gameboard->render();
         std::cout << "Turn: " << t << std::endl;
-        std::string coor = "";
-        markChoice = input.getInput<char>("Do you want to (e)xplore an area, (f)lag an area as dangerous or (s)ave the current map? (e, f, s)");
+        std::string coor = ""; //initializing needed to be outside the switch
+        markChoice = input.getInput<char>("Do you want to (e)xplore a cell, (f)lag a cell as dangerous or (s)ave the current map? (e, f, s)");
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         switch (markChoice) {
         case 'e':
-            coor = input.getInput<std::string>("which box do you want to explore?");
+            coor = input.getInput<std::string>("which cell do you want to explore?");
             if (input.isValidCoor(coor)) {
-                kaboom = gameboard->exploreBox(coor);
+                kaboom = gameboard->exploreCell(coor);
                 t++;
                 break;
             }
@@ -104,9 +107,9 @@ int main()
                 break;
             }
         case 'f':
-            coor = input.getInput<std::string>("which box do you want to flag?");
+            coor = input.getInput<std::string>("which cell do you want to flag?");
             if (input.isValidCoor(coor)) {
-                gameboard->flagBox(coor);
+                gameboard->flagCell(coor);
                 t++;
                 break;
             }
@@ -114,7 +117,7 @@ int main()
                 std::cout << "Not a valid coordinate, please choose a valid coordinate" << std::endl;
                 break;
         case 's':
-            gameboard->saveBoard("testSave.txt");
+            gameboard->saveBoard("mineSweeperSave.txt");
             break;
         default:
             std::cout << "Not a valid option, please choose between e/f/s \n" << std::endl;
